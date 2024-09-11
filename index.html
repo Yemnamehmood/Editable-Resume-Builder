@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Resume Builder</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 1px;
+        }
+
+        .form-container, .resume-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .resume {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resume h2 {
+            font-size: 24px;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .editable {
+            border: 1px dashed #007bff;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Editable Resume Builder</h1>
+    </div>
+
+    <div class="form-container">
+        <h2>Fill Out Your Information</h2>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+            <label for="contact">Contact Details:</label>
+            <input type="text" id="contact" placeholder="Enter your contact details">
+        </div>
+        <div class="form-group">
+            <label for="profile-pic">Profile Picture URL:</label>
+            <input type="text" id="profile-pic" placeholder="Enter the URL of your profile picture">
+        </div>
+        <div class="form-group">
+            <label for="education">Education:</label>
+            <textarea id="education" rows="3" placeholder="Enter your education details"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="skills">Skills:</label>
+            <textarea id="skills" rows="3" placeholder="Enter your skills"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="work-experience">Work Experience:</label>
+            <textarea id="work-experience" rows="3" placeholder="Enter your work experience"></textarea>
+        </div>
+        <button id="generate-resume" class="button">Generate Resume</button>
+    </div>
+
+    <div class="resume-container" id="resume-container" style="display:none;">
+        <div class="resume">
+            <h2>Resume</h2>
+            <p><strong>Name:</strong> <span id="display-name" class="editable" contenteditable="false"></span></p>
+            <p><strong>Contact:</strong> <span id="display-contact" class="editable" contenteditable="false"></span></p>
+            <p><strong>Profile Picture:</strong><br> <img id="display-pic" class="profile-pic editable" alt="Profile Picture" src="" style="width: 100px; height: 100px; border-radius: 50%;"></p>
+            <p><strong>Education:</strong> <span id="display-education" class="editable" contenteditable="false"></span></p>
+            <p><strong>Skills:</strong> <span id="display-skills" class="editable" contenteditable="false"></span></p>
+            <p><strong>Work Experience:</strong> <span id="display-work-experience" class="editable" contenteditable="false"></span></p>
+            <button id="edit-resume" class="button">Edit</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Editable Resume Builder by Yemna Mehmood. All rights reserved.
+    </div>
+
+    <script>
+        // JavaScript for generating and displaying the resume
+        document.getElementById('generate-resume').addEventListener('click', function() {
+            // Get the input values
+            const name = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            const profilePic = document.getElementById('profile-pic').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
+            const workExperience = document.getElementById('work-experience').value;
+
+            // Set the values to display on the resume
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('display-contact').innerText = contact;
+            document.getElementById('display-pic').src = profilePic;
+            document.getElementById('display-education').innerText = education;
+            document.getElementById('display-skills').innerText = skills;
+            document.getElementById('display-work-experience').innerText = workExperience;
+
+            // Show the resume container
+            document.getElementById('resume-container').style.display = 'block';
+        });
+
+        // JavaScript for edit and save functionality
+        document.getElementById('edit-resume').addEventListener('click', function() {
+            const editButton = document.getElementById('edit-resume');
+            const isEditing = editButton.innerText === 'Edit';
+
+            // Toggle editable content
+            document.querySelectorAll('.editable').forEach(element => {
+                element.contentEditable = isEditing;
+            });
+
+            // Toggle button text
+            editButton.innerText = isEditing ? 'Save' : 'Edit';
+        });
+    </script>
+</body>
+</html>
